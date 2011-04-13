@@ -13,7 +13,7 @@ Get a new machine up:
 		$ vagrant up
 
 
-Expriments
+Experiments
 ----------
 
 * ekoform php application
