@@ -1,4 +1,5 @@
 Vagrant::Config.run do |config|
+    #this box was made with fnichols veewee-definitions
     config.vm.box = "ubuntu-10.10-server-i386"
     #config.vm.box_url = "http://files.vagrantup.com/lucid32.box"
     #config.vm.forward_port "http", 80, 8080
