@@ -29,6 +29,8 @@ Experiments
 
 * gitorious : gitorious server - based on fnichol chef cookbooks
 * gitorious-pp: sugarlabs based [puppet install](http://git.sugarlabs.org/puppets)
+    *these are submodules on git.sugarlabs.org gitorious
+    
     
 * openvpn pair
 * couchdb demo app
