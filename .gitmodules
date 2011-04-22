@@ -4,3 +4,12 @@
 [submodule "opscodecookbooks"]
 	path = opscodecookbooks
 	url = https://github.com/opscode/cookbooks.git
+[submodule "sugar-pp-modules/firewall"]
+	path = sugar-pp-modules/firewall
+	url = git://git.sugarlabs.org/puppets/firewall.git
+[submodule "sugar-pp-modules/mysql"]
+	path = sugar-pp-modules/mysql
+	url = git://git.sugarlabs.org/puppets/mysql.git
+[submodule "sugar-pp-modules/gitorious"]
+	path = sugar-pp-modules/gitorious
+	url = git://git.sugarlabs.org/puppets/gitorious.git
