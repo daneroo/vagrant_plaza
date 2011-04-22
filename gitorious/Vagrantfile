@@ -1,30 +1,30 @@
 Vagrant::Config.run do |config|
-    #this box was made with fnichols veewee-definitions
-    config.vm.box = "ubuntu-10.10-server-i386"
-    #config.vm.box_url = "http://files.vagrantup.com/lucid32.box"
-    #config.vm.forward_port "http", 80, 8080
-    # config.vm.share_folder "v-data", "/vagrant_data", "../data"
+  #this box was made with fnichols veewee-definitions
+  config.vm.box = "ubuntu-10.10-server-i386"
+  #config.vm.box_url = "http://files.vagrantup.com/lucid32.box"
+  #config.vm.forward_port "http", 80, 8080
+  # config.vm.share_folder "v-data", "/vagrant_data", "../data"
 
   config.vm.provision :chef_solo do |chef|
-      chef.cookbooks_path =  ["cookbooks", "../fnicholcookbooks"]
-      #chef.cookbooks_path =  ["fnicholcookbooks"]
+    chef.cookbooks_path =  ["cookbooks", "../fnicholcookbooks"]
+    #chef.cookbooks_path =  ["fnicholcookbooks"]
 
-      # does all the magic.
-      chef.add_recipe("vagrant_main")
-      #   chef.add_recipe "mysql"
-      #   chef.add_role "web"
-      #   # You may also specify custom JSON attributes:
-      #chef.json = { :mysql_password => "foo" }
-      chef.json.merge!({
-        :mysql => {
-          :server_root_password => 'mysekret'
+    # does all the magic.
+    chef.add_recipe("vagrant_main")
+    #   chef.add_recipe "mysql"
+    #   chef.add_role "web"
+    #   # You may also specify custom JSON attributes:
+    #chef.json = { :mysql_password => "foo" }
+    chef.json.merge!({
+      :mysql => {
+        :server_root_password => 'mysekret'
         },
         :gitorious => {
           :db=>{
             :password => 'gitsekret'
           }
         }
-      })
-    end
+        })
 
+  end
 end
