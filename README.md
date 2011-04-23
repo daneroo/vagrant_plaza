@@ -12,6 +12,10 @@ Get a new machine up:
 		$ vagrant init lucid32
 		$ vagrant up
 
+Git:
+when checking out nested submodules use:
+
+    git submodule update --init --recursive
 
 Experiments
 ----------

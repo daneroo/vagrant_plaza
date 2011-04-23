@@ -24,7 +24,7 @@ Vagrant::Config.run do |config|
             :password => 'gitsekret'
           }
         }
-        })
+      })
 
   end
 end
