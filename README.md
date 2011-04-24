@@ -39,6 +39,17 @@ Experiments
 * openvpn pair
 * couchdb demo app
 
+Added -l debug to `run_chef_solo()`
+
+    sudo emacs /Library/Ruby/Gems/1.8/gems/vagrant-0.7.2/lib/vagrant/provisioners/chef_solo.rb
+    def run_chef_solo
+      #commands = ["cd #{config.provisioning_path}", "chef-solo -c solo.rb -j dna.json"]
+      commands = ["cd #{config.provisioning_path}", "chef-solo -c solo.rb -j dna.json -l debug"]
+
+Line 49 rvm:.../shell.rb: this Sooooooooo doesn;t go here!
+ 
+    gem install passenger
+
 Fixed: in `devops/vagrant_plaza/fnicholcookbooks/rvm`
 
     dirac:rvm daniel$ git diff

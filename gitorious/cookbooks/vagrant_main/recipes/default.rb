@@ -2,8 +2,19 @@
 
 #this runs apt-get update update
 require_recipe "apt"
+
+Chef::Log.info("DD about to require rubydev")
+
 # required otherwise the mysql gem will not install
-package 'ruby1.8-dev'
+#  --need to explain why
+#   package 'ruby1.8-dev'
+# delays it's installation...
+
+#package 'ruby1.8-dev'
+#p = package 'ruby1.8-dev'
+#p.run_action(:install)
+package('ruby1.8-dev').run_action(:install)
+Chef::Log.info("DD done requiring rubydev")
 
 Chef::Log.info("DD:mypswd #{node[:mysql][:server_root_password]}")
 Chef::Log.info("DD:gitpswd #{node[:gitorious][:db][:password]}")
