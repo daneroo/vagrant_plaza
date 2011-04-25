@@ -17,6 +17,10 @@ when checking out nested submodules use:
 
     git submodule update --init --recursive
 
+recursive submodule update:
+
+    git submodule foreach --recursive git pull origin master
+
 Experiments
 ----------
 
