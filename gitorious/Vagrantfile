@@ -24,6 +24,16 @@ Vagrant::Config.run do |config|
       :mysql => {
         :server_root_password => 'mysekret'
         },
+        #:rvm => {
+        #    :default_ruby             => "ruby-1.9.2-p180"
+        #},
+        #:iptables => {
+        #    :status                   => "enable"
+        #},
+        #:nginx => {
+        #    :iptables_ports           => [ 80, 443 ],
+        #    :extra_configure_flags    => [ "--with-http_sub_module" ]
+        #},
         :gitorious => {
           :db=>{
             :password => 'gitsekret'
