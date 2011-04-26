@@ -44,6 +44,13 @@ Experiments
 * openvpn pair
 * couchdb demo app
 
+Added missing links:
+
+    sudo ln -s /usr/local/rvm/wrappers/ree-1.8.7-2011.03@gitorious/ruby  /usr/local/bin/gitorious_ruby
+    sudo ln -s /usr/local/rvm/wrappers/ree-1.8.7-2011.03@gitorious/rake  /usr/local/bin/gitorious_rake
+    sudo ln -s /usr/local/rvm/wrappers/ree-1.8.7-2011.03@gitorious/gem  /usr/local/bin/gitorious_gem
+    sudo ln -s /usr/local/rvm/wrappers/ree-1.8.7-2011.03@gitorious/bundle  /usr/local/bin/gitorious_bundle 
+
 Added -l debug to `run_chef_solo()`
 
     sudo emacs /Library/Ruby/Gems/1.8/gems/vagrant-0.7.2/lib/vagrant/provisioners/chef_solo.rb
