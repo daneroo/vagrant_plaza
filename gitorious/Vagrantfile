@@ -4,7 +4,10 @@ Vagrant::Config.run do |config|
   #config.vm.box_url = "http://files.vagrantup.com/lucid32.box"
   config.vm.forward_port "http", 80, 8080
   config.vm.forward_port "https", 443, 8443
+  config.vm.share_folder "v-aptcache", "/var/cache/apt", "varcacheapt"
   # config.vm.share_folder "v-data", "/vagrant_data", "../data"
+  #config.vm.network("192.168.11.11", :adpater => 4)
+  config.vm.network("192.168.11.11")
   
   config.vm.customize do |vm|
     # see how much faster this is ... or not
@@ -22,25 +25,43 @@ Vagrant::Config.run do |config|
     #   # You may also specify custom JSON attributes:
     #chef.json = { :mysql_password => "foo" }
     chef.json.merge!({
+      :ubuntu=> {
+        :archive_url  => "http://ca.archive.ubuntu.com/ubuntu"
+      },
       :mysql => {
         :server_root_password => 'mysekret'
+      },
+      #:rvm => {
+      #    :default_ruby             => "ruby-1.9.2-p180"
+      #},
+      :iptables => {
+          :status                   => "enable"
+      },
+      :nginx => {
+          :iptables_ports           => [ 80, 443 ],
+          :extra_configure_flags    => [ "--with-http_sub_module" ]
+      },
+      :gitorious => {
+        :host => 'gitorious.local', 
+        :db => {
+          :password => 'gitsekret'
         },
-        #:rvm => {
-        #    :default_ruby             => "ruby-1.9.2-p180"
-        #},
-        #:iptables => {
-        #    :status                   => "enable"
-        #},
-        #:nginx => {
-        #    :iptables_ports           => [ 80, 443 ],
-        #    :extra_configure_flags    => [ "--with-http_sub_module" ]
-        #},
-        :gitorious => {
-          :db=>{
-            :password => 'gitsekret'
-          }
+        :notification_emails => "daniel.lauzon@gmail.com",
+        :support_email => "daniel.lauzon@gmail.com",
+        :mailer=>{
+          :delivery_method => 'smtp'
+        },
+        :smtp=>{
+          :tls=>"true",          
+          :address => "smtp.gmail.com",
+          :port => "587",
+          :domain => "gmail.com",
+          :username => "goedel.relay@gmail.com",
+          :password => "PASSWORD",
+          :authentication => :plain
         }
-      })
+      }
+    })
 
   end
 end

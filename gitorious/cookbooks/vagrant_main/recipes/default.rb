@@ -1,24 +1,81 @@
 #node[:apache][:listen_ports] = ["80","81"]
 
-#this runs apt-get update update
-require_recipe "apt"
+# setup apt canada
+Chef::Log.info("DD:ubuntu #{node[:lsb][:codename]}")
+Chef::Log.info("DD:ubuntu #{node['ubuntu']['archive_url']}")
+require_recipe "ubuntu"
 
-Chef::Log.info("DD about to require rubydev")
+# not necessary if running ubuntu recipe
+#this runs apt-get update update
+#require_recipe "apt"
 
 # required otherwise the mysql gem will not install
-#  --need to explain why
-#   package 'ruby1.8-dev'
-# delays it's installation...
-
-#package 'ruby1.8-dev'
-#p = package 'ruby1.8-dev'
-#p.run_action(:install)
+#   package 'ruby1.8-dev'  # delays it's installation...
 package('ruby1.8-dev').run_action(:install)
-Chef::Log.info("DD done requiring rubydev")
 
 Chef::Log.info("DD:mypswd #{node[:mysql][:server_root_password]}")
 Chef::Log.info("DD:gitpswd #{node[:gitorious][:db][:password]}")
+
 #Chef::Log.info("DD-:rvmroot #{node[:rvm][:root_path]}")
+#RVM::Environment does not have environment: fix
+# create links /usr/local/bin/gitorious_[rake ruby gem bundle] to
+# /usr/local/rvm/wrappers/ree-1.8.7-2011.03@gitorious[rake ruby gem bundle]
+%w{ rake ruby gem bundle }.each do |bin|
+  # e.g. gitorious_bundle
+  full_bin = "#{node[:gitorious][:rvm_gemset]}_#{bin}"
+  # e.g. /usr/local/bin/gitorious_bundle
+  script = ::File.join(::File.dirname(node[:rvm][:root_path]), "bin", full_bin)
+  # e.g. ree-1.8.7-2011.03@gitorious
+  rvm_ruby = select_ruby(node[:rvm_passenger][:rvm_ruby]) + "@" + node[:gitorious][:rvm_gemset]
+  # e.g. /usr/local/rvm/wrappers/ree-1.8.7-2011.03@gitorious/bundle
+  full_wrapper = ::File.join(node[:rvm][:root_path], "wrappers", rvm_ruby, bin)
+  Chef::Log.info("DD:create a link : #{script} to #{full_wrapper}")
+  # ln -s full_wrapper script
+  link script do
+    to full_wrapper
+  end
+end  
+
+# same for sys_stompserver
+# Creating rvm_wrapper[sys_stompserver::ree-1.8.7-2011.03@stompserver]
+# DD:create a link : /usr/local/bin/sys_stompserver to /usr/local/rvm/wrappers/ree-1.8.7-2011.03@stompserver/stompserver
+link '/usr/local/bin/sys_stompserver' do
+  to '/usr/local/rvm/wrappers/ree-1.8.7-2011.03@stompserver/stompserver'
+end
+
+# git user runs gitorious script, cannot find ${HOME}/.rvm/scripts/rvm
+# we will link to this one: /home/git/gitorious/current/.rvmrc
+%w{ /home/git/.rvm /home/git/.rvm/scripts }.each do |dir|
+  directory dir do
+  #  mode 0775
+    owner "git"
+    group "git"
+    action :create
+    recursive true
+  end
+end
+link '/home/git/.rvm/scripts/rvm' do
+  owner "git"
+  group "git"
+  to '/home/git/gitorious/current/.rvmrc'
+end
+
+# this is because nginx starts iptables, and shuts us out!
+# maybe we should use a properly configured openssh recipe.
+iptables_rule "port_tmpssh" do
+  enable true
+end
+
+ruby_block "edit etc hosts" do
+  block do
+    rc = Chef::Util::FileEdit.new("/etc/hosts")
+    githost_full = node[:gitorious][:host]
+    githost_justname = githost_full.split('.')[0]
+    Chef::Log.info("DD:/etc/hosts :== #{githost_full} #{githost_justname}")    
+    rc.search_file_replace_line(/^127\.0\.0\.1\s+localhost$/, "127.0.0.1\t#{githost_full} #{githost_justname} localhost")
+    rc.write_file
+  end
+end
 
 require_recipe "vagrant_extras"
 require_recipe "mysql::server"

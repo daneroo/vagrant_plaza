@@ -44,6 +44,13 @@ Experiments
 * openvpn pair
 * couchdb demo app
 
+## Gitoruous
+Networking:
+
+config.vm.network("192.168.10.11", :adpater => 4)
+config.vm.forward_port("http", 80, 8080, :adapter => 4)
+
+
 Added missing links:
 
     sudo ln -s /usr/local/rvm/wrappers/ree-1.8.7-2011.03@gitorious/ruby  /usr/local/bin/gitorious_ruby
