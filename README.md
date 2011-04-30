@@ -44,44 +44,22 @@ Experiments
 * openvpn pair
 * couchdb demo app
 
-## Gitoruous
+## Gitoruous Notes
 Networking:
 
-config.vm.network("192.168.10.11", :adpater => 4)
-config.vm.forward_port("http", 80, 8080, :adapter => 4)
+Give Vagrant box a known host only ip address
 
+    config.vm.network("192.168.11.11")
 
-Added missing links:
+define gitorious.local as a host only ip on host: /etc/hosts
 
-    sudo ln -s /usr/local/rvm/wrappers/ree-1.8.7-2011.03@gitorious/ruby  /usr/local/bin/gitorious_ruby
-    sudo ln -s /usr/local/rvm/wrappers/ree-1.8.7-2011.03@gitorious/rake  /usr/local/bin/gitorious_rake
-    sudo ln -s /usr/local/rvm/wrappers/ree-1.8.7-2011.03@gitorious/gem  /usr/local/bin/gitorious_gem
-    sudo ln -s /usr/local/rvm/wrappers/ree-1.8.7-2011.03@gitorious/bundle  /usr/local/bin/gitorious_bundle 
+    192.168.11.11	www.gitorious.local gitorious.local
 
-Added -l debug to `run_chef_solo()`
+Added -l debug to `run_chef_solo()` while debugging gitorious recipe
 
-    sudo emacs /Library/Ruby/Gems/1.8/gems/vagrant-0.7.2/lib/vagrant/provisioners/chef_solo.rb
+    # vagrant gem version may change 0.7.2 0.7.3
+    sudo emacs /Library/Ruby/Gems/1.8/gems/vagrant-0.7.3/lib/vagrant/provisioners/chef_solo.rb
     def run_chef_solo
       #commands = ["cd #{config.provisioning_path}", "chef-solo -c solo.rb -j dna.json"]
       commands = ["cd #{config.provisioning_path}", "chef-solo -c solo.rb -j dna.json -l debug"]
 
-Line 49 rvm:.../shell.rb: this Sooooooooo doesn;t go here!
- 
-    gem install passenger
-
-Fixed: in `devops/vagrant_plaza/fnicholcookbooks/rvm`
-
-    dirac:rvm daniel$ git diff
-    diff --git a/providers/gem.rb b/providers/gem.rb
-    index 1447cb2..9b3ffd0 100644
-    --- a/providers/gem.rb
-    +++ b/providers/gem.rb
-    @@ -100,7 +100,7 @@ def gem_package_wrapper(exec_action, ruby_string=new_resource.ruby_string)
-       profile = find_profile_to_source
- 
-       g = gem_package new_resource.gem do
-    -    gem_binary  "source #{profile} && rvm #{ruby_string} gem"
-    +    gem_binary  %{bash -c "source #{profile} && rvm #{ruby_string} gem"}
-         source      new_resource.source if new_resource.source
-         options     new_resource.options if new_resource.options
-         version     new_resource.version if new_resource.version
