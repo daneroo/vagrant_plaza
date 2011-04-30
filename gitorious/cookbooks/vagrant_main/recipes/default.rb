@@ -43,8 +43,41 @@ link '/usr/local/bin/sys_stompserver' do
   to '/usr/local/rvm/wrappers/ree-1.8.7-2011.03@stompserver/stompserver'
 end
 
+ruby_block "edit etc hosts" do
+  block do
+    rc = Chef::Util::FileEdit.new("/etc/hosts")
+    githost_full = node[:gitorious][:host]
+    githost_justname = githost_full.split('.')[0]
+    Chef::Log.info("DD:/etc/hosts :== #{githost_full} #{githost_justname}")    
+    rc.search_file_replace_line(/^127\.0\.0\.1\s+localhost$/, "127.0.0.1\t#{githost_full} #{githost_justname} localhost")
+    rc.write_file
+  end
+end
+
+# this is because nginx::source starts iptables, and shuts us out!
+# maybe we should use a properly configured openssh recipe.
+# this was moved down becaouse /etc/iptables.d did not exist. require repie iptable might do the trick!
+case node[:platform]
+when "redhat","centos","debian","ubuntu"
+  include_recipe "iptables"
+
+  #if node[:nginx][:iptables_allow] == "disable", then enable false ?
+  iptables_rule "port_ssh" do
+    enable true
+  end
+end
+
+require_recipe "vagrant_extras"
+require_recipe "mysql::server"
+#require_recipe "rvm"
+#require_recipe "rvm_passenger"
+require_recipe "gitorious"
+
+# These need to run after gitorious recipe, so the git user exists
+
 # git user runs gitorious script, cannot find ${HOME}/.rvm/scripts/rvm
 # we will link to this one: /home/git/gitorious/current/.rvmrc
+# only required for actual connections to git (thru ssh)
 %w{ /home/git/.rvm /home/git/.rvm/scripts }.each do |dir|
   directory dir do
   #  mode 0775
@@ -59,29 +92,6 @@ link '/home/git/.rvm/scripts/rvm' do
   group "git"
   to '/home/git/gitorious/current/.rvmrc'
 end
-
-# this is because nginx starts iptables, and shuts us out!
-# maybe we should use a properly configured openssh recipe.
-iptables_rule "port_tmpssh" do
-  enable true
-end
-
-ruby_block "edit etc hosts" do
-  block do
-    rc = Chef::Util::FileEdit.new("/etc/hosts")
-    githost_full = node[:gitorious][:host]
-    githost_justname = githost_full.split('.')[0]
-    Chef::Log.info("DD:/etc/hosts :== #{githost_full} #{githost_justname}")    
-    rc.search_file_replace_line(/^127\.0\.0\.1\s+localhost$/, "127.0.0.1\t#{githost_full} #{githost_justname} localhost")
-    rc.write_file
-  end
-end
-
-require_recipe "vagrant_extras"
-require_recipe "mysql::server"
-require_recipe "rvm"
-require_recipe "rvm_passenger"
-require_recipe "gitorious"
 
 # Some nice to haves
 %w{ iftop curl unzip }.each do |a_package|
