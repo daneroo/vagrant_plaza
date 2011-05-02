@@ -1,0 +1,29 @@
+Vagrant::Config.run do |config|
+  #this box was made with fnichols veewee-definitions
+  config.vm.box = "ubuntu-10.10-server-i386"
+  config.vm.customize do |vm|
+    vm.memory_size = 512 #1024
+  end
+  path="varcacheapt"
+  if File.exists?(path) && File.directory?(path)
+    #puts("DD:apt-cache found directory #{path} mounting as /var/cache/apt")
+    config.vm.share_folder "v-aptcache", "/var/cache/apt", "../varcacheapt"
+  #else puts("DD:apt-cache directory #{path} not found to mount as /var/cache/apt")
+  end
+  
+  config.vm.provision :chef_solo do |chef|
+    chef.cookbooks_path =  ["cookbooks", "../fnicholcookbooks"]
+    chef.add_recipe("vagrant_main")
+    chef.json.merge!({
+      :ubuntu=> {
+        :archive_url  => "http://ca.archive.ubuntu.com/ubuntu"
+        #:archive_url  => "http://us.archive.ubuntu.com/ubuntu"
+      },
+      :rvm => {
+        #:default_ruby             => "ruby-1.9.2-p180"
+        :rubies => ["ruby-1.9.2-p180","ree-1.8.7-2011.03@passenger"]
+      }
+    })
+
+  end
+end
