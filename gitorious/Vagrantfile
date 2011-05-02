@@ -1,21 +1,21 @@
 Vagrant::Config.run do |config|
-  #this box was made with fnichols veewee-definitions
-  config.vm.box = "ubuntu-10.10-server-i386"
-  #config.vm.box_url = "http://files.vagrantup.com/lucid32.box"
-  config.vm.forward_port "http", 80, 8080
-  config.vm.forward_port "https", 443, 8443
-  config.vm.share_folder "v-aptcache", "/var/cache/apt", "varcacheapt"
-  # config.vm.share_folder "v-data", "/vagrant_data", "../data"
-  config.vm.network("192.168.11.11")
-  
+  #this box was made with rvm_basebox
+  config.vm.box = "rvm-ubu1010"
   config.vm.customize do |vm|
     # see how much faster this is ... or not
     vm.memory_size = 512 #1024
   end
+  path="varcacheapt"
+  if File.exists?(path) && File.directory?(path)
+    #puts("DD:apt-cache found directory #{path} mounting as /var/cache/apt")
+    config.vm.share_folder "v-aptcache", "/var/cache/apt", "../varcacheapt"
+  #else puts("DD:apt-cache directory #{path} not found to mount as /var/cache/apt")
+  end
+  config.vm.network("192.168.11.11")
+  
   
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path =  ["cookbooks", "../fnicholcookbooks"]
-    #chef.cookbooks_path =  ["fnicholcookbooks"]
 
     # does all the magic.
     chef.add_recipe("vagrant_main")
@@ -56,7 +56,7 @@ Vagrant::Config.run do |config|
           :port => "587",
           :domain => "gmail.com",
           :username => "goedel.relay@gmail.com",
-          :password => "PASSWORD",
+          :password => "PASS",
           :authentication => :plain
         }
       }
