@@ -12,6 +12,23 @@ require_recipe "ubuntu"
 # -make vagrant part of rvm group (why?)
 require_recipe "vagrant_extras"
 
+# depends on group rvm existing (vagrant_extras)
+# FileUtils.mkdir_p('/usr/local/rvm/archives')
+
+directory '/usr/local/rvm/archives' do
+#  mode 0775
+  owner "root"
+  group "rvm"
+  action :create
+  recursive true
+end
+execute "copy ruby sources" do
+  command "cp /vagrant/rubies/* /usr/local/rvm/archives"
+#  creates "/var/lib/slapd/uid.bdb"
+  action :run
+#  environment ({'HOME' => '/home/myhome'})
+end
+
 # install ruby-1.9.2 and ree-1.8.7 as per node[:rvm][:rubies]
 require_recipe "rvm"
 

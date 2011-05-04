@@ -30,6 +30,9 @@ Experiments
     [fnichol](https://github.com/fnichol) also has some nice [definitions](https://github.com/fnichol/veewee-definitions)
 
 
+    Might want to remove the `deb http://apt.opscode.com..` from `/etc/apt/sources.list.d/opscode.list`
+    which is installed by the veewee definitions.
+
 		sudo gem install [veewee](https://github.com/jedi4ever/veewee)
 		vagrant basebox define 'axbase' 'ubuntu-10.10-server-i386'
 		vagrant basebox build 'axbase'

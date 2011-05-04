@@ -1,5 +1,8 @@
 # Vagrant box as base for gitorious
 
+_NOTE_ How did `/etc/apt/sources.list.d/opscode.list` get there
+(`deb http://apt.opscode.com/ maverick main`)
+
 _NOTE_ currently needs a fix to work
 
     $ git diff gem.rb 
