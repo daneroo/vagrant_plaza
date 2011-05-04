@@ -12,7 +12,7 @@ Vagrant::Config.run do |config|
   end
   
   config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path =  ["cookbooks", "../fnicholcookbooks"]
+    chef.cookbooks_path =  ["cookbooks", "../fnichol-cookbooks"]
     chef.add_recipe("vagrant_main")
     chef.json.merge!({
       :ubuntu=> {
