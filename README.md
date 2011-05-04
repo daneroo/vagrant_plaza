@@ -54,7 +54,7 @@ in `fnicholcookbooks/rvm/providers/gem.rb`::103, replace gem_binary
     #gem_binary  %{bash -c "source #{profile}" && rvm #{ruby_string} gem}
     gem_binary  %{#{node[:rvm][:root_path]}/bin/rvm #{ruby_string} gem}
 
-and `fnicholcookbooks/rvm/providers/gem.rb`::66 replace the old `webapp_site_skel` with:
+and `fnicholcookbooks/gitorious/recipes/default.rb`::66 replace the old `webapp_site_skel` with:
 
     webapp_vhost_skel "gitorious" do               
       host_name       node[:gitorious][:host]
