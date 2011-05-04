@@ -10,6 +10,3 @@
 [submodule "sugar-pp-modules/gitorious"]
 	path = sugar-pp-modules/gitorious
 	url = git://git.sugarlabs.org/puppets/gitorious.git
-[submodule "fnicholcookbooks"]
-	path = fnicholcookbooks
-	url = https://github.com/fnichol/chef-cookbooks.git
