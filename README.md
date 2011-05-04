@@ -48,6 +48,13 @@ Experiments
 * couchdb demo app
 
 ## Gitoruous Notes
+
+in `fnicholcookbooks/rvm/providers/gem.rb`, replace gem_binary
+
+    #gem_binary  %{bash -c "source #{profile}" && rvm #{ruby_string} gem}
+    gem_binary  %{#{node[:rvm][:root_path]}/bin/rvm #{ruby_string} gem}
+
+
 Networking:
 
 Give Vagrant box a known host only ip address

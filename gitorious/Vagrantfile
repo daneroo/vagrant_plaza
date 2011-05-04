@@ -4,14 +4,14 @@ Vagrant::Config.run do |config|
   #config.vm.box = "rvm-ubu1010"
   config.vm.customize do |vm|
     # see how much faster this is ... or not
-    vm.memory_size = 512 #1024
+    vm.memory_size = 1024 #512 #1024
   end
   path="../varcacheapt"
   if File.exists?(path) && File.directory?(path)
     puts("DD:apt-cache found directory #{path} mounting as /var/cache/apt")
     config.vm.share_folder "v-aptcache", "/var/cache/apt", path
   else 
-    puts("DD:apt-cache directory #{path} not found to mount as /var/cache/apt")
+    puts("DD:apt-cache directory #{path} not found cannot mount as /var/cache/apt")
   end
   config.vm.network("192.168.11.11")
   
@@ -33,8 +33,9 @@ Vagrant::Config.run do |config|
         :server_root_password => 'mysekret'
       },
       :rvm => {
+        :default_ruby             => "ree-1.8.7-2011.03"
         #:default_ruby             => "ruby-1.9.2-p180"
-        :rubies => ["ruby-1.9.2-p180","ree-1.8.7-2011.03"]
+        #:rubies => ["ruby-1.9.2-p180","ree-1.8.7-2011.03"]
       },
       :iptables => {
           :status                   => "enable"
