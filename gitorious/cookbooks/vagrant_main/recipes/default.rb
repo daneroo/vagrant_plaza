@@ -1,17 +1,22 @@
 #node[:apache][:listen_ports] = ["80","81"]
 
 # setup apt canada
-Chef::Log.info("DD:ubuntu #{node[:lsb][:codename]}")
-Chef::Log.info("DD:ubuntu #{node['ubuntu']['archive_url']}")
-require_recipe "ubuntu"
+if false then
+  Chef::Log.info("DD:ubuntu #{node[:lsb][:codename]}")
+  Chef::Log.info("DD:ubuntu #{node['ubuntu']['archive_url']}")
+  require_recipe "ubuntu"
+else
+  # not necessary if running ubuntu recipe
+  # this runs apt-get update update
+  require_recipe "apt"
+end
 
-# not necessary if running ubuntu recipe
-#this runs apt-get update update
-#require_recipe "apt"
-
-# required otherwise the mysql gem will not install
-#   package 'ruby1.8-dev'  # delays it's installation...
-package('ruby1.8-dev').run_action(:install)
+if true then
+  # this is coverd in base box now
+  # required otherwise the mysql gem will not install
+  #   package 'ruby1.8-dev'  # delays it's installation...
+  package('ruby1.8-dev').run_action(:install)
+end
 
 Chef::Log.info("DD:mypswd #{node[:mysql][:server_root_password]}")
 Chef::Log.info("DD:gitpswd #{node[:gitorious][:db][:password]}")
@@ -67,7 +72,8 @@ when "redhat","centos","debian","ubuntu"
   end
 end
 
-require_recipe "vagrant_extras"
+#require_recipe "vagrant_extras"
+
 require_recipe "mysql::server"
 #require_recipe "rvm"
 #require_recipe "rvm_passenger"
