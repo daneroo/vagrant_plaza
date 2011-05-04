@@ -49,10 +49,26 @@ Experiments
 
 ## Gitoruous Notes
 
-in `fnicholcookbooks/rvm/providers/gem.rb`, replace gem_binary
+in `fnicholcookbooks/rvm/providers/gem.rb`::103, replace gem_binary
 
     #gem_binary  %{bash -c "source #{profile}" && rvm #{ruby_string} gem}
     gem_binary  %{#{node[:rvm][:root_path]}/bin/rvm #{ruby_string} gem}
+
+and `fnicholcookbooks/rvm/providers/gem.rb`::66 replace the old `webapp_site_skel` with:
+
+    webapp_vhost_skel "gitorious" do               
+      host_name       node[:gitorious][:host]
+      non_ssl_server  true
+      ssl_server      true
+      ssl_cert        node[:gitorious][:ssl][:cert]
+      ssl_key         node[:gitorious][:ssl][:key]
+    end
+
+    webapp_app_skel "gitorious" do
+      vhost           "gitorious"
+      profile         "rails"
+      user            app_user
+    end
 
 
 Networking:
