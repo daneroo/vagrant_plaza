@@ -1,6 +1,3 @@
-[submodule "fnicholcookbooks"]
-	path = fnicholcookbooks
-	url = https://github.com/fnichol/chef-cookbooks
 [submodule "opscodecookbooks"]
 	path = opscodecookbooks
 	url = https://github.com/opscode/cookbooks.git
